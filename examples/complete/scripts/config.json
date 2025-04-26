@@ -1,0 +1,29 @@
+{
+  "job_config": {
+    "source_format": "parquet",
+    "target_format": "parquet",
+    "compression": "snappy",
+    "partition_columns": ["year", "month", "day"],
+    "batch_size": 100000
+  },
+  "data_quality": {
+    "enable_validation": true,
+    "required_columns": ["id", "timestamp", "value"],
+    "validation_rules": [
+      {
+        "column": "id",
+        "rule": "not_null"
+      },
+      {
+        "column": "value",
+        "rule": "range",
+        "min": 0,
+        "max": 100
+      }
+    ]
+  },
+  "monitoring": {
+    "enable_metrics": true,
+    "log_level": "INFO"
+  }
+}

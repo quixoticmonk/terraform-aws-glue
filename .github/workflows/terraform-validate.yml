@@ -1,0 +1,43 @@
+name: Terraform Validate
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        example:
+          - complete
+          - pythonshell
+          - bring-your-own-role
+          - minimal
+          - schema-registry-dependency
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.11.4
+          terraform_wrapper: false
+
+      - name: Terraform Init
+        working-directory: examples/${{ matrix.example }}
+        run: terraform init -backend=false
+
+      - name: Terraform Validate
+        working-directory: examples/${{ matrix.example }}
+        run: terraform validate
