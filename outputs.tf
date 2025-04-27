@@ -47,3 +47,116 @@ output "security_configuration_name" {
   description = "Name of the Glue security configuration"
   value       = try(aws_glue_security_configuration.encryption[0].name, null)
 }
+
+# Catalog Database outputs
+output "catalog_database_id" {
+  description = "ID of the Glue catalog database"
+  value       = try(aws_glue_catalog_database.this[0].id, null)
+}
+
+output "catalog_database_name" {
+  description = "Name of the Glue catalog database"
+  value       = try(aws_glue_catalog_database.this[0].name, null)
+}
+
+output "catalog_database_arn" {
+  description = "ARN of the Glue catalog database"
+  value       = try(aws_glue_catalog_database.this[0].arn, null)
+}
+
+# Connection outputs
+output "connection_id" {
+  description = "ID of the Glue connection"
+  value       = try(aws_glue_connection.this[0].id, null)
+}
+
+output "connection_name" {
+  description = "Name of the Glue connection"
+  value       = try(aws_glue_connection.this[0].name, null)
+}
+
+# Crawler outputs
+output "crawler_id" {
+  description = "ID of the Glue crawler"
+  value       = try(aws_glue_crawler.this[0].id, null)
+}
+
+output "crawler_name" {
+  description = "Name of the Glue crawler"
+  value       = try(aws_glue_crawler.this[0].name, null)
+}
+
+output "crawler_arn" {
+  description = "ARN of the Glue crawler"
+  value       = try(aws_glue_crawler.this[0].arn, null)
+}
+
+# Trigger outputs
+output "trigger_id" {
+  description = "ID of the Glue trigger"
+  value       = try(aws_glue_trigger.this[0].id, null)
+}
+
+output "trigger_name" {
+  description = "Name of the Glue trigger"
+  value       = try(aws_glue_trigger.this[0].name, null)
+}
+
+output "trigger_arn" {
+  description = "ARN of the Glue trigger"
+  value       = try(aws_glue_trigger.this[0].arn, null)
+}
+
+# Workflow outputs
+output "workflow_id" {
+  description = "ID of the Glue workflow"
+  value       = try(aws_glue_workflow.this[0].id, null)
+}
+
+output "workflow_name" {
+  description = "Name of the Glue workflow"
+  value       = try(aws_glue_workflow.this[0].name, null)
+}
+
+output "workflow_arn" {
+  description = "ARN of the Glue workflow"
+  value       = try(aws_glue_workflow.this[0].arn, null)
+}
+
+# Dev Endpoint outputs
+output "dev_endpoint_id" {
+  description = "ID of the Glue dev endpoint"
+  value       = try(aws_glue_dev_endpoint.this[0].id, null)
+}
+
+output "dev_endpoint_name" {
+  description = "Name of the Glue dev endpoint"
+  value       = try(aws_glue_dev_endpoint.this[0].name, null)
+}
+
+output "dev_endpoint_arn" {
+  description = "ARN of the Glue dev endpoint"
+  value       = try(aws_glue_dev_endpoint.this[0].arn, null)
+}
+
+# Registry outputs
+output "registry_arn" {
+  description = "ARN of the Glue registry"
+  value       = try(aws_glue_registry.this[0].arn, null)
+}
+
+output "registry_name" {
+  description = "Name of the Glue registry"
+  value       = try(aws_glue_registry.this[0].registry_name, null)
+}
+
+# Schema outputs
+output "schema_arn" {
+  description = "ARN of the Glue schema"
+  value       = local.create_schema ? "schema:${local.schema_name}" : null
+}
+
+output "schema_name" {
+  description = "Name of the Glue schema"
+  value       = local.create_schema ? local.schema_name : null
+}
