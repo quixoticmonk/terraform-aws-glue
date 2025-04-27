@@ -74,14 +74,5 @@ module "glue" {
   job_name   = "byoiam-job"
   job_command_script_location = "s3://example-bucket/scripts/byoiam-job.py"
 
-  # Disable other resources
-  create_connection            = false
-  create_trigger               = false
-  create_workflow              = false
-  create_security_configuration = false
-  create_dev_endpoint          = false
-  create_schema                = false
-  create_registry              = false
-
   tags = local.tags
 }

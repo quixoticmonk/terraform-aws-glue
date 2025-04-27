@@ -19,18 +19,6 @@ module "glue" {
   create_s3_bucket = true
   s3_bucket_name   = "demo-glue-scripts-bucket"
   
-  # S3 Encryption
-  enable_s3_encryption = true
-  # s3_kms_key_arn = "arn:aws:kms:us-west-2:123456789012:key/abcd1234-ab12-cd34-ef56-abcdef123456"
-  
-  # Job Bookmarks Encryption
-  enable_job_bookmarks_encryption = true
-  # job_bookmarks_encryption_kms_key_arn = "arn:aws:kms:us-west-2:123456789012:key/abcd1234-ab12-cd34-ef56-abcdef123456"
-  
-  # CloudWatch Logs Encryption
-  enable_cloudwatch_encryption = true
-  # cloudwatch_encryption_kms_key_arn = "arn:aws:kms:us-west-2:123456789012:key/abcd1234-ab12-cd34-ef56-abcdef123456"
-  
   # Catalog Database
   create_catalog_database = true
   catalog_database_name   = "demo_database"

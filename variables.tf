@@ -295,3 +295,285 @@ variable "crawler_s3_targets" {
   type        = list(map(string))
   default     = []
 }
+
+# Connection
+variable "create_connection" {
+  description = "Controls if Glue connection should be created"
+  type        = bool
+  default     = false
+}
+
+variable "connection_name" {
+  description = "Name of the Glue connection"
+  type        = string
+  default     = null
+}
+
+variable "connection_description" {
+  description = "Description of the Glue connection"
+  type        = string
+  default     = null
+}
+
+variable "connection_type" {
+  description = "Type of the connection. Supported are: JDBC, KAFKA, MONGODB, NETWORK, MARKETPLACE, CUSTOM"
+  type        = string
+  default     = "JDBC"
+}
+
+variable "connection_properties" {
+  description = "Map of connection properties"
+  type        = map(string)
+  default     = null
+}
+
+variable "physical_connection_requirements" {
+  description = "Map of physical connection requirements"
+  type        = map(any)
+  default     = null
+}
+
+variable "catalog_id" {
+  description = "The ID of the Data Catalog in which to create the connection"
+  type        = string
+  default     = null
+}
+
+# Trigger
+variable "create_trigger" {
+  description = "Controls if Glue trigger should be created"
+  type        = bool
+  default     = false
+}
+
+variable "trigger_name" {
+  description = "Name of the Glue trigger"
+  type        = string
+  default     = null
+}
+
+variable "trigger_description" {
+  description = "Description of the Glue trigger"
+  type        = string
+  default     = null
+}
+
+variable "trigger_type" {
+  description = "Type of the trigger. Valid values: SCHEDULED, CONDITIONAL, ON_DEMAND, EVENT"
+  type        = string
+  default     = "ON_DEMAND"
+}
+
+variable "trigger_enabled" {
+  description = "Whether the trigger should be enabled"
+  type        = bool
+  default     = true
+}
+
+variable "trigger_schedule" {
+  description = "Cron expression for the schedule"
+  type        = string
+  default     = null
+}
+
+variable "trigger_actions" {
+  description = "List of actions to be executed by the trigger"
+  type        = list(map(any))
+  default     = []
+}
+
+variable "trigger_predicate" {
+  description = "Predicate for the trigger"
+  type        = map(any)
+  default     = null
+}
+
+variable "trigger_workflow_name" {
+  description = "Name of the workflow associated with the trigger"
+  type        = string
+  default     = null
+}
+
+variable "trigger_start_on_creation" {
+  description = "Whether the trigger should start on creation"
+  type        = bool
+  default     = false
+}
+
+# Workflow
+variable "create_workflow" {
+  description = "Controls if Glue workflow should be created"
+  type        = bool
+  default     = false
+}
+
+variable "workflow_name" {
+  description = "Name of the Glue workflow"
+  type        = string
+  default     = null
+}
+
+variable "workflow_description" {
+  description = "Description of the Glue workflow"
+  type        = string
+  default     = null
+}
+
+variable "workflow_default_run_properties" {
+  description = "Default run properties for the workflow"
+  type        = map(string)
+  default     = null
+}
+
+variable "workflow_max_concurrent_runs" {
+  description = "Maximum number of concurrent runs for the workflow"
+  type        = number
+  default     = null
+}
+
+# Dev Endpoint
+variable "create_dev_endpoint" {
+  description = "Controls if Glue dev endpoint should be created"
+  type        = bool
+  default     = false
+}
+
+variable "dev_endpoint_name" {
+  description = "Name of the Glue dev endpoint"
+  type        = string
+  default     = null
+}
+
+variable "dev_endpoint_arguments" {
+  description = "Map of arguments for the dev endpoint"
+  type        = map(string)
+  default     = null
+}
+
+variable "dev_endpoint_extra_jars_s3_path" {
+  description = "S3 path to extra JARs for the dev endpoint"
+  type        = string
+  default     = null
+}
+
+variable "dev_endpoint_extra_python_libs_s3_path" {
+  description = "S3 path to extra Python libraries for the dev endpoint"
+  type        = string
+  default     = null
+}
+
+variable "dev_endpoint_glue_version" {
+  description = "Glue version for the dev endpoint"
+  type        = string
+  default     = null
+}
+
+variable "dev_endpoint_number_of_nodes" {
+  description = "Number of nodes for the dev endpoint"
+  type        = number
+  default     = null
+}
+
+variable "dev_endpoint_number_of_workers" {
+  description = "Number of workers for the dev endpoint"
+  type        = number
+  default     = null
+}
+
+variable "dev_endpoint_public_key" {
+  description = "Public key for the dev endpoint"
+  type        = string
+  default     = null
+}
+
+variable "dev_endpoint_public_keys" {
+  description = "List of public keys for the dev endpoint"
+  type        = list(string)
+  default     = null
+}
+
+variable "dev_endpoint_security_configuration" {
+  description = "Security configuration for the dev endpoint"
+  type        = string
+  default     = null
+}
+
+variable "dev_endpoint_security_group_ids" {
+  description = "List of security group IDs for the dev endpoint"
+  type        = list(string)
+  default     = null
+}
+
+variable "dev_endpoint_subnet_id" {
+  description = "Subnet ID for the dev endpoint"
+  type        = string
+  default     = null
+}
+
+variable "dev_endpoint_worker_type" {
+  description = "Worker type for the dev endpoint"
+  type        = string
+  default     = null
+}
+
+# Schema Registry
+variable "create_registry" {
+  description = "Controls if Glue registry should be created"
+  type        = bool
+  default     = false
+}
+
+variable "registry_name" {
+  description = "Name of the Glue registry"
+  type        = string
+  default     = null
+}
+
+variable "registry_description" {
+  description = "Description of the Glue registry"
+  type        = string
+  default     = null
+}
+
+# Schema
+variable "create_schema" {
+  description = "Controls if Glue schema should be created"
+  type        = bool
+  default     = false
+}
+
+variable "schema_name" {
+  description = "Name of the Glue schema"
+  type        = string
+  default     = null
+}
+
+variable "schema_registry_name" {
+  description = "Name of an existing registry to use for the schema"
+  type        = string
+  default     = null
+}
+
+variable "schema_description" {
+  description = "Description of the Glue schema"
+  type        = string
+  default     = null
+}
+
+variable "schema_compatibility" {
+  description = "Compatibility mode of the schema. Valid values: NONE, DISABLED, BACKWARD, BACKWARD_ALL, FORWARD, FORWARD_ALL, FULL, FULL_ALL"
+  type        = string
+  default     = "NONE"
+}
+
+variable "schema_data_format" {
+  description = "Data format of the schema. Valid values: AVRO, JSON, PROTOBUF"
+  type        = string
+  default     = "AVRO"
+}
+
+variable "schema_definition" {
+  description = "Schema definition as a JSON string"
+  type        = string
+  default     = null
+}
