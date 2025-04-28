@@ -8,11 +8,11 @@ resource "aws_glue_connection" "this" {
 
   name        = local.connection_name
   description = var.connection_description
-  
+
   connection_type = var.connection_type
-  
+
   connection_properties = var.connection_properties
-  
+
   dynamic "physical_connection_requirements" {
     for_each = var.physical_connection_requirements != null ? [var.physical_connection_requirements] : []
     content {
@@ -23,6 +23,6 @@ resource "aws_glue_connection" "this" {
   }
 
   catalog_id = var.catalog_id
-  
+
   tags = var.tags
 }

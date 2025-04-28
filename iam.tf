@@ -7,7 +7,7 @@ resource "aws_iam_role" "glue" {
   count = local.create_iam_role ? 1 : 0
 
   name = var.iam_role_name != null ? "${var.prefix}${var.iam_role_name}" : "${var.prefix}glue-service-role"
-  
+
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -20,7 +20,7 @@ resource "aws_iam_role" "glue" {
       }
     ]
   })
-  
+
   tags = var.tags
 }
 
@@ -57,7 +57,7 @@ resource "aws_iam_policy" "glue_s3_access" {
   name        = "${var.prefix}glue-s3-access-policy"
   description = "Policy for Glue job to access S3 bucket for scripts and data"
   policy      = data.aws_iam_policy_document.glue_s3_access[0].json
-  
+
   tags = var.tags
 }
 

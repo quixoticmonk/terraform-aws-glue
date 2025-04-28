@@ -7,6 +7,6 @@ resource "aws_glue_catalog_database" "this" {
 
   name        = var.catalog_database_name != null ? "${var.prefix}${var.catalog_database_name}" : null
   description = "Glue catalog database created by Terraform"
-  
+
   tags = var.tags
 }
