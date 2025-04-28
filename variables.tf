@@ -548,8 +548,8 @@ variable "schema_name" {
   default     = null
 }
 
-variable "schema_registry_name" {
-  description = "Name of an existing registry to use for the schema"
+variable "schema_registry_arn" {
+  description = "ARN of an existing registry to use for the schema"
   type        = string
   default     = null
 }
@@ -576,4 +576,29 @@ variable "schema_definition" {
   description = "Schema definition as a JSON string"
   type        = string
   default     = null
+}
+
+# Schema Version
+variable "create_schema_version" {
+  description = "Controls if Glue schema version should be created"
+  type        = bool
+  default     = false
+}
+
+variable "schema_arn" {
+  description = "ARN of an existing schema to use for the schema version"
+  type        = string
+  default     = null
+}
+
+variable "schema_version_definition" {
+  description = "Schema version definition as a JSON string. If not provided, schema_definition will be used"
+  type        = string
+  default     = null
+}
+
+variable "schema_version_metadata" {
+  description = "Map of metadata key-value pairs to add to the schema version"
+  type        = map(string)
+  default     = {}
 }

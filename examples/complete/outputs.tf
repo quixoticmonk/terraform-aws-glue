@@ -13,7 +13,32 @@ output "catalog_database_name" {
   value       = module.glue.catalog_database_name
 }
 
-output "security_configuration_name" {
-  description = "Name of the Glue security configuration"
-  value       = module.glue.security_configuration_name
+output "registry_name" {
+  description = "Name of the Glue registry"
+  value       = module.glue.registry_name
+}
+
+output "registry_arn" {
+  description = "ARN of the Glue registry"
+  value       = module.glue.registry_arn
+}
+
+output "schema_name" {
+  description = "Name of the Glue schema"
+  value       = module.glue.schema_name
+}
+
+output "schema_arn" {
+  description = "ARN of the Glue schema"
+  value       = module.glue.schema_arn
+}
+
+output "schema_version_id" {
+  description = "ID of the Glue schema version"
+  value       = module.glue.schema_version_id
+}
+
+output "schema_aware_job_name" {
+  description = "Name of the schema-aware Glue job"
+  value       = module.schema_aware_job.job_name
 }

@@ -66,6 +66,8 @@ module "glue" {
 - [Complete](examples/complete) - Complete example with all supported resources
 - [Minimal](examples/minimal) - Minimal example with only basic job configuration
 - [PythonShell](examples/pythonshell) - Example using PythonShell job type
+- [Schema Registry Dependency](examples/schema-registry-dependency) - Example showing schema registry dependencies
+- [Schema Version](examples/schema-version) - Example demonstrating schema version creation and metadata
 
 ## Features
 
@@ -85,6 +87,8 @@ This module supports the following AWS Glue resources:
 ### AWSCC Provider Resources
 - AWSCC Glue Schema
 - AWSCC Glue Registry
+- AWSCC Glue Schema Version
+- AWSCC Glue Schema Version Metadata
 
 ## Module Configuration
 

@@ -70,7 +70,7 @@ module "glue_schema_only" {
   # Schema
   create_schema = true
   schema_name   = "example-schema-using-existing-registry"
-  schema_registry_name = module.glue.registry_name
+  schema_registry_arn = module.glue.registry_arn
   schema_description = "Example schema that uses an existing registry"
   schema_compatibility = "BACKWARD"
   schema_data_format = "AVRO"

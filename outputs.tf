@@ -142,21 +142,26 @@ output "dev_endpoint_arn" {
 # Registry outputs
 output "registry_arn" {
   description = "ARN of the Glue registry"
-  value       = try(aws_glue_registry.this[0].arn, null)
+  value       = try(awscc_glue_registry.this[0].arn, null)
 }
 
 output "registry_name" {
   description = "Name of the Glue registry"
-  value       = try(aws_glue_registry.this[0].registry_name, null)
+  value       = try(awscc_glue_registry.this[0].name, null)
 }
 
 # Schema outputs
 output "schema_arn" {
   description = "ARN of the Glue schema"
-  value       = local.create_schema ? "schema:${local.schema_name}" : null
+  value       = try(awscc_glue_schema.this[0].arn, null)
 }
 
 output "schema_name" {
   description = "Name of the Glue schema"
-  value       = local.create_schema ? local.schema_name : null
+  value       = try(awscc_glue_schema.this[0].name, null)
+}
+# Schema version outputs
+output "schema_version_id" {
+  description = "ID of the Glue schema version"
+  value       = try(awscc_glue_schema_version.this[0].version_id, null)
 }
