@@ -3,15 +3,18 @@ locals {
   create_security_configuration = var.create && (var.enable_job_bookmarks_encryption || var.enable_cloudwatch_encryption)
   security_configuration_name   = "${var.prefix}glue-security-config"
 
-  # Define Python versions based on Glue version
-  python_versions = {
+  # Define Python versions based on Glue version for GlueETL jobs
+  glue_etl_python_versions = {
     "3.0" = "3.7"
     "4.0" = "3.10"
-    "5.0" = "3.10"
+    "5.0" = "3.11"
   }
 
-  # Determine Python version based on Glue version if not explicitly set
-  python_version = var.python_version != null ? var.python_version : local.python_versions[var.glue_version]
+  # For PythonShell jobs, only Python 3.9 is supported
+  pythonshell_python_version = "3.9"
+
+  # Determine Python version based on job type and Glue version
+  python_version = var.job_type == "pythonshell" ? local.pythonshell_python_version : local.glue_etl_python_versions[var.glue_version]
 
   # Default arguments based on job type and Glue version
   default_arguments = merge(
@@ -19,11 +22,17 @@ locals {
       "--job-language"            = var.job_language
       "--enable-glue-datacatalog" = "true"
     },
+    # Add ETL-specific arguments only for glueetl job type
     var.job_type == "glueetl" ? {
       "--enable-metrics"                   = "true"
       "--enable-continuous-cloudwatch-log" = "true"
     } : {},
-    var.job_default_arguments
+    # Add autoscaling configuration if enabled (only for glueetl jobs)
+    var.enable_autoscaling && var.job_type == "glueetl" ? {
+      "--enable-auto-scaling" = "true"
+    } : {},
+    var.job_default_arguments,
+    var.job_parameters
   )
 
   # Update default arguments with Python dependencies if provided
@@ -44,9 +53,10 @@ resource "aws_glue_job" "this" {
   name                   = local.job_name
   description            = var.job_description
   role_arn               = var.create_iam_role ? aws_iam_role.glue[0].arn : var.iam_role_arn
-  glue_version           = var.glue_version
-  execution_class        = var.job_execution_class
+  glue_version           = var.job_type == "pythonshell" ? null : var.glue_version
+  execution_class        = var.job_type == "pythonshell" ? null : var.job_execution_class
   timeout                = var.timeout
+  max_retries            = var.max_retries
   security_configuration = local.create_security_configuration ? aws_glue_security_configuration.encryption[0].name : var.security_configuration
   connections            = length(var.job_connections) > 0 ? var.job_connections : null
 
@@ -65,17 +75,26 @@ resource "aws_glue_job" "this" {
   }
 
   # Configure resources based on job type
-  max_capacity      = (var.job_type == "glueetl" || var.job_type == "pythonshell") && var.max_capacity != null && var.worker_type == null ? var.max_capacity : null
-  worker_type       = var.worker_type != null ? var.worker_type : null
-  number_of_workers = var.worker_type != null ? var.number_of_workers : null
+  max_capacity = (
+    # For pythonshell jobs, always use max_capacity
+    var.job_type == "pythonshell" ? (
+      var.max_capacity != null ? var.max_capacity : 0.0625
+    ) :
+    # For glueetl jobs, use max_capacity only if worker_type is not specified
+    (var.job_type == "glueetl" && var.max_capacity != null && var.worker_type == null) ? var.max_capacity : null
+  )
+
+  # Worker type and number of workers only apply to glueetl jobs
+  worker_type       = var.job_type == "glueetl" && var.worker_type != null ? var.worker_type : null
+  number_of_workers = var.job_type == "glueetl" && var.worker_type != null ? var.number_of_workers : null
 
   default_arguments = local.default_arguments_with_deps
 
-  # Enable job insights if specified
+  # Enable job insights if specified (only for glueetl jobs)
   dynamic "notification_property" {
-    for_each = var.enable_job_insights ? [1] : []
+    for_each = var.enable_job_insights && var.job_type == "glueetl" ? [1] : []
     content {
-      notify_delay_after = 10 # Default to 10 minutes
+      notify_delay_after = var.notify_delay_after
     }
   }
 

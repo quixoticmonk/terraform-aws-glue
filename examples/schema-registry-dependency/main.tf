@@ -1,9 +1,9 @@
 provider "aws" {
-  region = "us-west-2"
+  region = "us-east-1"
 }
 
 provider "awscc" {
-  region = "us-west-2"
+  region = "us-east-1"
 }
 
 module "glue" {
@@ -26,8 +26,8 @@ module "glue" {
   schema_description = "Example schema that depends on the registry"
   schema_compatibility = "BACKWARD"
   schema_data_format = "AVRO"
-  schema_definition = <<EOF
-{
+  schema_definition = jsonencode(
+    {
   "type": "record",
   "name": "ExampleRecord",
   "namespace": "com.example",
@@ -46,7 +46,7 @@ module "glue" {
     }
   ]
 }
-EOF
+  )
   
   tags = {
     Environment = "dev"
@@ -74,8 +74,8 @@ module "glue_schema_only" {
   schema_description = "Example schema that uses an existing registry"
   schema_compatibility = "BACKWARD"
   schema_data_format = "AVRO"
-  schema_definition = <<EOF
-{
+  schema_definition = jsonencode(
+    {
   "type": "record",
   "name": "AnotherRecord",
   "namespace": "com.example",
@@ -90,7 +90,7 @@ module "glue_schema_only" {
     }
   ]
 }
-EOF
+  )
   
   tags = {
     Environment = "dev"

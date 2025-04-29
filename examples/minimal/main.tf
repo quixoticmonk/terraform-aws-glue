@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "us-west-2"
+  region = "us-east-1"
 }
 
 module "glue" {
@@ -18,7 +18,7 @@ module "glue" {
   
   # Use existing S3 bucket and script
   create_s3_bucket = false
-  existing_s3_bucket_name = "my-existing-bucket"
+  existing_s3_bucket_name = "statetest-s3"
   job_script_local_path = "${path.module}/scripts/simple_job.py"
   
   # Worker configuration

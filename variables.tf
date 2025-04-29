@@ -60,7 +60,7 @@ variable "job_type" {
   default     = "glueetl"
   validation {
     condition     = contains(["glueetl", "pythonshell"], var.job_type)
-    error_message = "Valid values for job_type are: glueetl or pythonshell."
+    error_message = "Valid values for job_type are: glueetl or pythonshell. Ray jobs are not currently supported."
   }
 }
 
@@ -90,12 +90,6 @@ variable "job_language" {
   }
 }
 
-variable "python_version" {
-  description = "The Python version to use. If not specified, it will be determined based on Glue version"
-  type        = string
-  default     = null
-}
-
 variable "max_capacity" {
   description = "The maximum capacity for this job. Used only for Glue ETL jobs"
   type        = number
@@ -114,6 +108,12 @@ variable "number_of_workers" {
   default     = null
 }
 
+variable "enable_autoscaling" {
+  description = "Enable autoscaling for the Glue job"
+  type        = bool
+  default     = false
+}
+
 variable "max_concurrent_runs" {
   description = "The maximum number of concurrent runs allowed for this job"
   type        = number
@@ -128,6 +128,12 @@ variable "timeout" {
 
 variable "job_default_arguments" {
   description = "Default arguments for the job"
+  type        = map(string)
+  default     = {}
+}
+
+variable "job_parameters" {
+  description = "Job parameters to be passed to the job. These will be merged with default arguments"
   type        = map(string)
   default     = {}
 }
@@ -152,6 +158,18 @@ variable "enable_job_insights" {
   description = "Specifies whether job insights are enabled for the job"
   type        = bool
   default     = false
+}
+
+variable "notify_delay_after" {
+  description = "The number of minutes to wait after a job run starts before sending a job run delay notification"
+  type        = number
+  default     = 10
+}
+
+variable "max_retries" {
+  description = "The maximum number of times to retry this job if it fails"
+  type        = number
+  default     = 0
 }
 
 variable "security_configuration" {
@@ -306,13 +324,13 @@ variable "create_connection" {
 variable "connection_name" {
   description = "Name of the Glue connection"
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "connection_description" {
   description = "Description of the Glue connection"
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "connection_type" {
@@ -349,13 +367,13 @@ variable "create_trigger" {
 variable "trigger_name" {
   description = "Name of the Glue trigger"
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "trigger_description" {
   description = "Description of the Glue trigger"
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "trigger_type" {
@@ -410,13 +428,13 @@ variable "create_workflow" {
 variable "workflow_name" {
   description = "Name of the Glue workflow"
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "workflow_description" {
   description = "Description of the Glue workflow"
   type        = string
-  default     = null
+  default     = "null"
 }
 
 variable "workflow_default_run_properties" {
@@ -441,7 +459,7 @@ variable "create_dev_endpoint" {
 variable "dev_endpoint_name" {
   description = "Name of the Glue dev endpoint"
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "dev_endpoint_arguments" {
@@ -526,13 +544,13 @@ variable "create_registry" {
 variable "registry_name" {
   description = "Name of the Glue registry"
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "registry_description" {
   description = "Description of the Glue registry"
   type        = string
-  default     = null
+  default     = ""
 }
 
 # Schema
@@ -545,7 +563,7 @@ variable "create_schema" {
 variable "schema_name" {
   description = "Name of the Glue schema"
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "schema_registry_arn" {
@@ -578,27 +596,8 @@ variable "schema_definition" {
   default     = null
 }
 
-# Schema Version
-variable "create_schema_version" {
-  description = "Controls if Glue schema version should be created"
-  type        = bool
-  default     = false
-}
-
 variable "schema_arn" {
-  description = "ARN of an existing schema to use for the schema version"
+  description = "ARN of an existing schema to use"
   type        = string
   default     = null
-}
-
-variable "schema_version_definition" {
-  description = "Schema version definition as a JSON string. If not provided, schema_definition will be used"
-  type        = string
-  default     = null
-}
-
-variable "schema_version_metadata" {
-  description = "Map of metadata key-value pairs to add to the schema version"
-  type        = map(string)
-  default     = {}
 }

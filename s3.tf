@@ -2,6 +2,13 @@ locals {
   create_s3_bucket = var.create && var.create_job && var.create_s3_bucket
   use_s3_bucket    = var.create && var.create_job
 
+  # Validate S3 bucket configuration
+  validate_s3_config = (
+    !local.use_s3_bucket ||
+    (local.create_s3_bucket && var.existing_s3_bucket_name == null) ||
+    (!local.create_s3_bucket && var.existing_s3_bucket_name != null)
+  ) ? true : tobool("Either create_s3_bucket must be true or existing_s3_bucket_name must be provided")
+
   # Determine which bucket to use
   s3_bucket_name = local.create_s3_bucket ? (
     var.s3_bucket_name != null ? var.s3_bucket_name : "${var.prefix}glue-scripts-${random_string.random[0].result}"

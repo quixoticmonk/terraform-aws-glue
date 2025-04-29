@@ -33,11 +33,6 @@ output "schema_arn" {
   value       = module.glue.schema_arn
 }
 
-output "schema_version_id" {
-  description = "ID of the Glue schema version"
-  value       = module.glue.schema_version_id
-}
-
 output "schema_aware_job_name" {
   description = "Name of the schema-aware Glue job"
   value       = module.schema_aware_job.job_name

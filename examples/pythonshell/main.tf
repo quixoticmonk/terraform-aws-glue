@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "us-west-2"
+  region = "us-east-1"
 }
 
 module "glue" {
@@ -19,7 +19,6 @@ module "glue" {
   job_name   = "data-processor"
   job_type   = "pythonshell"
   glue_version = "4.0"
-  python_version = "3.10"  # Explicitly set Python version
   
   # Local script that will be uploaded to S3
   job_script_local_path = "${path.module}/scripts/process_data.py"
