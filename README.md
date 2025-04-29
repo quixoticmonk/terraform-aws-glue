@@ -34,7 +34,7 @@ module "glue" {
   # Option 2: Upload local script to S3
   create_s3_bucket = true
   job_script_local_path = "${path.module}/scripts/example-job.py"
-## Job Type Specific Configuration
+```
 
 ### GlueETL Jobs
 ```hcl
