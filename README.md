@@ -38,27 +38,27 @@ module "glue" {
 
 ### GlueETL Jobs
 ```hcl
-module "glue\_etl\_job" {
+module "glue_etl_job" {
   source = "terraform-aws-modules/glue/aws"
 
   # Basic configuration
   prefix = "etl-"
-  create\_job = true
-  job\_name = "data-transformation"
-  job\_type = "glueetl"
-  glue\_version = "4.0"
+  create_job = true
+  job_name = "data-transformation"
+  job_type = "glueetl"
+  glue_version = "4.0"
   timeout = 60
-  max\_retries = 2
+  max_retries = 2
   # Worker configuration
-  worker\_type = "G.1X"
-  number\_of\_workers = 2
+  worker_type = "G.1X"
+  number_of_workers = 2
   # Autoscaling configuration (only for glueetl jobs)
-  enable\_autoscaling = true
+  enable_autoscaling = true
   # Job insights (only for glueetl jobs)
-  enable\_job\_insights = true
-  notify\_delay\_after = 15
+  enable_job_insights = true
+  notify_delay_after = 15
   # Job parameters
-  job\_parameters = {
+  job_parameters = {
     "--conf" = "spark.dynamicAllocation.enabled=true"
   }
 }
@@ -66,30 +66,30 @@ module "glue\_etl\_job" {
 
 ### PythonShell Jobs
 ```hcl
-module "glue\_python\_job" {
+module "glue_python_job" {
   source = "terraform-aws-modules/glue/aws"
 
   # Basic configuration
   prefix = "python-"
-  create\_job = true
-  job\_name = "data-processing"
-  job\_type = "pythonshell"
-  # PythonShell jobs use max\_capacity instead of worker\_type/number\_of\_workers
-  max\_capacity = 0.0625  # Equivalent to G.025X
+  create_job = true
+  job_name = "data-processing"
+  job_type = "pythonshell"
+  # PythonShell jobs use max_capacity instead of worker_type/number_of_workers
+  max_capacity = 0.0625  # Equivalent to G.025X
   # Note: Python version (3.9) is automatically set for PythonShell jobs
   # Job parameters
-  job\_parameters = {
+  job_parameters = {
     "--my-param" = "my-value"
   }
 }
 ```
   # Encryption configuration
-  enable_s3_encryption = true
-  s3_kms_key_arn = "arn:aws:kms:us-east-1:123456789012:key/abcd1234-ab12-cd34-ef56-abcdef123456"
-  enable_job_bookmarks_encryption = true
-  job_bookmarks_encryption_kms_key_arn = "arn:aws:kms:us-east-1:123456789012:key/abcd1234-ab12-cd34-ef56-abcdef123456"
-  enable_cloudwatch_encryption = true
-  cloudwatch_encryption_kms_key_arn = "arn:aws:kms:us-east-1:123456789012:key/abcd1234-ab12-cd34-ef56-abcdef123456"
+  enable\_s3\_encryption = true
+  s3\_kms\_key\_arn = "arn:aws:kms:us-east-1:123456789012:key/abcd1234-ab12-cd34-ef56-abcdef123456"
+  enable\_job\_bookmarks\_encryption = true
+  job\_bookmarks\_encryption\_kms\_key\_arn = "arn:aws:kms:us-east-1:123456789012:key/abcd1234-ab12-cd34-ef56-abcdef123456"
+  enable\_cloudwatch\_encryption = true
+  cloudwatch\_encryption\_kms\_key\_arn = "arn:aws:kms:us-east-1:123456789012:key/abcd1234-ab12-cd34-ef56-abcdef123456"
   tags = {
     Environment = "dev"
     Project     = "data-pipeline"
@@ -118,9 +118,9 @@ This module supports the following AWS Glue resources:
 - AWS Glue Security Configuration
 - AWS Glue Dev Endpoint
 - IAM Role for Glue resources
+- AWS Glue Schema
 
 ### AWSCC Provider Resources
-- AWSCC Glue Schema
 - AWSCC Glue Registry
 
 ## Module Configuration
@@ -154,7 +154,7 @@ This module currently supports the following AWS Glue job types:
 #### Glue Versions
 - **Glue 3.0**: Based on Apache Spark 3.1.1, Python 3.7
 - **Glue 4.0**: Based on Apache Spark 3.3.0, Python 3.10
-- **Glue 5.0**: Based on Apache Spark 3.4.1, Python 3.10
+- **Glue 5.0**: Based on Apache Spark 3.4.1, Python 3.11
 
 #### Worker Types
 - **Standard**: For general purpose workloads
@@ -176,9 +176,9 @@ module "glue" {
   source = "terraform-aws-modules/glue/aws"
 
   # ... other configuration ...
-  create_job = true
-  job_name   = "example-job"
-  job_command_script_location = "s3://my-existing-bucket/scripts/my-job.py"
+  create\_job = true
+  job\_name   = "example-job"
+  job\_command\_script\_location = "s3://my-existing-bucket/scripts/my-job.py"
 }
 ```
 
@@ -190,17 +190,17 @@ module "glue" {
   source = "terraform-aws-modules/glue/aws"
 
   # ... other configuration ...
-  create_job = true
-  job_name   = "example-job"
+  create\_job = true
+  job\_name   = "example-job"
   # Option 1: Create a new S3 bucket for scripts
-  create_s3_bucket = true
-  s3_bucket_name   = "my-glue-scripts-bucket" # Optional, generated if not provided
+  create\_s3\_bucket = true
+  s3\_bucket\_name   = "my-glue-scripts-bucket" # Optional, generated if not provided
   # Option 2: Use an existing S3 bucket
-  create_s3_bucket      = false
-  existing_s3_bucket_name = "my-existing-bucket"
+  create\_s3\_bucket      = false
+  existing\_s3\_bucket\_name = "my-existing-bucket"
   # Local script path and optional S3 key
-  job_script_local_path = "${path.module}/scripts/my-job.py"
-  job_script_s3_key     = "custom/path/my-job.py" # Optional, defaults to scripts/filename
+  job\_script\_local\_path = "${path.module}/scripts/my-job.py"
+  job\_script\_s3\_key     = "custom/path/my-job.py" # Optional, defaults to scripts/filename
 }
 ```
 
@@ -209,6 +209,7 @@ This approach automatically:
 2. Uploads your local script to the specified S3 bucket
 3. Sets the correct S3 path in the Glue job configuration
 4. Tracks script changes using file checksums for proper updates
+```
 
 ## Requirements
 
