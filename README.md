@@ -83,13 +83,15 @@ module "glue_python_job" {
   }
 }
 ```
+
   # Encryption configuration
-  enable\_s3\_encryption = true
-  s3\_kms\_key\_arn = "arn:aws:kms:us-east-1:123456789012:key/abcd1234-ab12-cd34-ef56-abcdef123456"
-  enable\_job\_bookmarks\_encryption = true
-  job\_bookmarks\_encryption\_kms\_key\_arn = "arn:aws:kms:us-east-1:123456789012:key/abcd1234-ab12-cd34-ef56-abcdef123456"
-  enable\_cloudwatch\_encryption = true
-  cloudwatch\_encryption\_kms\_key\_arn = "arn:aws:kms:us-east-1:123456789012:key/abcd1234-ab12-cd34-ef56-abcdef123456"
+  ```hcl
+  enable_s3_encryption = true
+  s3_kms_key_arn = "arn:aws:kms:us-east-1:123456789012:key/abcd1234-ab12-cd34-ef56-abcdef123456"
+  enable_job_bookmarks_encryption = true
+  job_bookmarks_encryption_kms_key_arn = "arn:aws:kms:us-east-1:123456789012:key/abcd1234-ab12-cd34-ef56-abcdef123456"
+  enable_cloudwatch_encryption = true
+  cloudwatch_encryption_kms_key_arn = "arn:aws:kms:us-east-1:123456789012:key/abcd1234-ab12-cd34-ef56-abcdef123456"
   tags = {
     Environment = "dev"
     Project     = "data-pipeline"
@@ -176,9 +178,9 @@ module "glue" {
   source = "terraform-aws-modules/glue/aws"
 
   # ... other configuration ...
-  create\_job = true
-  job\_name   = "example-job"
-  job\_command\_script\_location = "s3://my-existing-bucket/scripts/my-job.py"
+  create_job = true
+  job_name   = "example-job"
+  job_command_script_location = "s3://my-existing-bucket/scripts/my-job.py"
 }
 ```
 
@@ -190,17 +192,17 @@ module "glue" {
   source = "terraform-aws-modules/glue/aws"
 
   # ... other configuration ...
-  create\_job = true
-  job\_name   = "example-job"
+  create_job = true
+  job_name   = "example-job"
   # Option 1: Create a new S3 bucket for scripts
-  create\_s3\_bucket = true
-  s3\_bucket\_name   = "my-glue-scripts-bucket" # Optional, generated if not provided
+  create_s3_bucket = true
+  s3_bucket_name   = "my-glue-scripts-bucket" # Optional, generated if not provided
   # Option 2: Use an existing S3 bucket
-  create\_s3\_bucket      = false
-  existing\_s3\_bucket\_name = "my-existing-bucket"
+  create_s3_bucket      = false
+  existing_s3_bucket_name = "my-existing-bucket"
   # Local script path and optional S3 key
-  job\_script\_local\_path = "${path.module}/scripts/my-job.py"
-  job\_script\_s3\_key     = "custom/path/my-job.py" # Optional, defaults to scripts/filename
+  job_script_local_path = "${path.module}/scripts/my-job.py"
+  job_script_s3_key     = "custom/path/my-job.py" # Optional, defaults to scripts/filename
 }
 ```
 
@@ -209,7 +211,6 @@ This approach automatically:
 2. Uploads your local script to the specified S3 bucket
 3. Sets the correct S3 path in the Glue job configuration
 4. Tracks script changes using file checksums for proper updates
-```
 
 ## Requirements
 
