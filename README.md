@@ -83,15 +83,13 @@ module "glue_python_job" {
   }
 }
 ```
-
   # Encryption configuration
-  ```hcl
-  enable_s3_encryption = true
-  s3_kms_key_arn = "arn:aws:kms:us-east-1:123456789012:key/abcd1234-ab12-cd34-ef56-abcdef123456"
-  enable_job_bookmarks_encryption = true
-  job_bookmarks_encryption_kms_key_arn = "arn:aws:kms:us-east-1:123456789012:key/abcd1234-ab12-cd34-ef56-abcdef123456"
-  enable_cloudwatch_encryption = true
-  cloudwatch_encryption_kms_key_arn = "arn:aws:kms:us-east-1:123456789012:key/abcd1234-ab12-cd34-ef56-abcdef123456"
+  enable\_s3\_encryption = true
+  s3\_kms\_key\_arn = "arn:aws:kms:us-east-1:123456789012:key/abcd1234-ab12-cd34-ef56-abcdef123456"
+  enable\_job\_bookmarks\_encryption = true
+  job\_bookmarks\_encryption\_kms\_key\_arn = "arn:aws:kms:us-east-1:123456789012:key/abcd1234-ab12-cd34-ef56-abcdef123456"
+  enable\_cloudwatch\_encryption = true
+  cloudwatch\_encryption\_kms\_key\_arn = "arn:aws:kms:us-east-1:123456789012:key/abcd1234-ab12-cd34-ef56-abcdef123456"
   tags = {
     Environment = "dev"
     Project     = "data-pipeline"
@@ -178,9 +176,9 @@ module "glue" {
   source = "terraform-aws-modules/glue/aws"
 
   # ... other configuration ...
-  create_job = true
-  job_name   = "example-job"
-  job_command_script_location = "s3://my-existing-bucket/scripts/my-job.py"
+  create\_job = true
+  job\_name   = "example-job"
+  job\_command\_script\_location = "s3://my-existing-bucket/scripts/my-job.py"
 }
 ```
 
@@ -192,17 +190,17 @@ module "glue" {
   source = "terraform-aws-modules/glue/aws"
 
   # ... other configuration ...
-  create_job = true
-  job_name   = "example-job"
+  create\_job = true
+  job\_name   = "example-job"
   # Option 1: Create a new S3 bucket for scripts
-  create_s3_bucket = true
-  s3_bucket_name   = "my-glue-scripts-bucket" # Optional, generated if not provided
+  create\_s3\_bucket = true
+  s3\_bucket\_name   = "my-glue-scripts-bucket" # Optional, generated if not provided
   # Option 2: Use an existing S3 bucket
-  create_s3_bucket      = false
-  existing_s3_bucket_name = "my-existing-bucket"
+  create\_s3\_bucket      = false
+  existing\_s3\_bucket\_name = "my-existing-bucket"
   # Local script path and optional S3 key
-  job_script_local_path = "${path.module}/scripts/my-job.py"
-  job_script_s3_key     = "custom/path/my-job.py" # Optional, defaults to scripts/filename
+  job\_script\_local\_path = "${path.module}/scripts/my-job.py"
+  job\_script\_s3\_key     = "custom/path/my-job.py" # Optional, defaults to scripts/filename
 }
 ```
 
@@ -211,6 +209,7 @@ This approach automatically:
 2. Uploads your local script to the specified S3 bucket
 3. Sets the correct S3 path in the Glue job configuration
 4. Tracks script changes using file checksums for proper updates
+```
 
 ## Requirements
 
@@ -225,9 +224,9 @@ This approach automatically:
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 5.0.0 |
-| <a name="provider_awscc"></a> [awscc](#provider\_awscc) | >= 1.0.0 |
-| <a name="provider_random"></a> [random](#provider\_random) | n/a |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.97.0 |
+| <a name="provider_awscc"></a> [awscc](#provider\_awscc) | 1.40.0 |
+| <a name="provider_random"></a> [random](#provider\_random) | 3.7.2 |
 
 ## Modules
 
@@ -240,7 +239,6 @@ No modules.
 | [aws_glue_catalog_database.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/glue_catalog_database) | resource |
 | [aws_glue_connection.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/glue_connection) | resource |
 | [aws_glue_crawler.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/glue_crawler) | resource |
-| [aws_glue_dev_endpoint.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/glue_dev_endpoint) | resource |
 | [aws_glue_job.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/glue_job) | resource |
 | [aws_glue_schema.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/glue_schema) | resource |
 | [aws_glue_security_configuration.encryption](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/glue_security_configuration) | resource |
@@ -373,9 +371,6 @@ No modules.
 | <a name="output_crawler_arn"></a> [crawler\_arn](#output\_crawler\_arn) | ARN of the Glue crawler |
 | <a name="output_crawler_id"></a> [crawler\_id](#output\_crawler\_id) | ID of the Glue crawler |
 | <a name="output_crawler_name"></a> [crawler\_name](#output\_crawler\_name) | Name of the Glue crawler |
-| <a name="output_dev_endpoint_arn"></a> [dev\_endpoint\_arn](#output\_dev\_endpoint\_arn) | ARN of the Glue dev endpoint |
-| <a name="output_dev_endpoint_id"></a> [dev\_endpoint\_id](#output\_dev\_endpoint\_id) | ID of the Glue dev endpoint |
-| <a name="output_dev_endpoint_name"></a> [dev\_endpoint\_name](#output\_dev\_endpoint\_name) | Name of the Glue dev endpoint |
 | <a name="output_iam_role_arn"></a> [iam\_role\_arn](#output\_iam\_role\_arn) | ARN of IAM role |
 | <a name="output_iam_role_name"></a> [iam\_role\_name](#output\_iam\_role\_name) | Name of IAM role |
 | <a name="output_job_arn"></a> [job\_arn](#output\_job\_arn) | ARN of the Glue job |

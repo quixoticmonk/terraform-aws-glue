@@ -123,22 +123,6 @@ output "workflow_arn" {
   value       = try(aws_glue_workflow.this[0].arn, null)
 }
 
-# Dev Endpoint outputs
-output "dev_endpoint_id" {
-  description = "ID of the Glue dev endpoint"
-  value       = try(aws_glue_dev_endpoint.this[0].id, null)
-}
-
-output "dev_endpoint_name" {
-  description = "Name of the Glue dev endpoint"
-  value       = try(aws_glue_dev_endpoint.this[0].name, null)
-}
-
-output "dev_endpoint_arn" {
-  description = "ARN of the Glue dev endpoint"
-  value       = try(aws_glue_dev_endpoint.this[0].arn, null)
-}
-
 # Registry outputs
 output "registry_arn" {
   description = "ARN of the Glue registry"
