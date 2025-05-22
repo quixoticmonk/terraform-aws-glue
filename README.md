@@ -17,23 +17,23 @@ module "glue" {
   create_catalog_database = true
   catalog_database_name   = "example_database"
   # Crawler
-  create_crawler = true
-  crawler_name   = "example-crawler"
-  crawler_s3_targets = [
+  create_crawler      = true
+  crawler_name        = "example-crawler"
+  crawler_s3_targets  = [
     {
       path = "s3://example-bucket/example-path"
     }
   ]
   # Job with S3 script upload
-  create_job = true
-  job_name   = "example-job"
-  job_type   = "glueetl"
-  glue_version = "4.0"
+  create_job                    = true
+  job_name                      = "example-job"
+  job_type                      = "glueetl"
+  glue_version                  = "4.0"
   # Option 1: Use existing S3 script location
-  job_command_script_location = "s3://example-bucket/scripts/example-job.py"
+  job_command_script_location   = "s3://example-bucket/scripts/example-job.py"
   # Option 2: Upload local script to S3
-  create_s3_bucket = true
-  job_script_local_path = "${path.module}/scripts/example-job.py"
+  create_s3_bucket              = true
+  job_script_local_path         = "${path.module}/scripts/example-job.py"
 ```
 
 ### GlueETL Jobs
@@ -42,21 +42,25 @@ module "glue_etl_job" {
   source = "terraform-aws-modules/glue/aws"
 
   # Basic configuration
-  prefix = "etl-"
-  create_job = true
-  job_name = "data-transformation"
-  job_type = "glueetl"
+  prefix       = "etl-"
+  create_job   = true
+  job_name     = "data-transformation"
+  job_type     = "glueetl"
   glue_version = "4.0"
-  timeout = 60
-  max_retries = 2
+  timeout      = 60
+  max_retries  = 2
+
   # Worker configuration
-  worker_type = "G.1X"
+  worker_type       = "G.1X"
   number_of_workers = 2
+
   # Autoscaling configuration (only for glueetl jobs)
   enable_autoscaling = true
+
   # Job insights (only for glueetl jobs)
   enable_job_insights = true
-  notify_delay_after = 15
+  notify_delay_after  = 15
+
   # Job parameters
   job_parameters = {
     "--conf" = "spark.dynamicAllocation.enabled=true"
@@ -70,26 +74,39 @@ module "glue_python_job" {
   source = "terraform-aws-modules/glue/aws"
 
   # Basic configuration
-  prefix = "python-"
+  prefix     = "python-"
   create_job = true
-  job_name = "data-processing"
-  job_type = "pythonshell"
+  job_name   = "data-processing"
+  job_type   = "pythonshell"
+
   # PythonShell jobs use max_capacity instead of worker_type/number_of_workers
-  max_capacity = 0.0625  # Equivalent to G.025X
+  max_capacity = 0.0625 # Equivalent to G.025X
+
   # Note: Python version (3.9) is automatically set for PythonShell jobs
+
   # Job parameters
   job_parameters = {
     "--my-param" = "my-value"
   }
 }
 ```
+
+### Encryption Configuration
+
+```hcl
+module "glue" {
+  source = "terraform-aws-modules/glue/aws"
+
+  # ... other configuration ...
+
   # Encryption configuration
-  enable\_s3\_encryption = true
-  s3\_kms\_key\_arn = "arn:aws:kms:us-east-1:123456789012:key/abcd1234-ab12-cd34-ef56-abcdef123456"
-  enable\_job\_bookmarks\_encryption = true
-  job\_bookmarks\_encryption\_kms\_key\_arn = "arn:aws:kms:us-east-1:123456789012:key/abcd1234-ab12-cd34-ef56-abcdef123456"
-  enable\_cloudwatch\_encryption = true
-  cloudwatch\_encryption\_kms\_key\_arn = "arn:aws:kms:us-east-1:123456789012:key/abcd1234-ab12-cd34-ef56-abcdef123456"
+  enable_s3_encryption                  = true
+  s3_kms_key_arn                        = "arn:aws:kms:us-east-1:123456789012:key/abcd1234-ab12-cd34-ef56-abcdef123456"
+  enable_job_bookmarks_encryption       = true
+  job_bookmarks_encryption_kms_key_arn  = "arn:aws:kms:us-east-1:123456789012:key/abcd1234-ab12-cd34-ef56-abcdef123456"
+  enable_cloudwatch_encryption          = true
+  cloudwatch_encryption_kms_key_arn     = "arn:aws:kms:us-east-1:123456789012:key/abcd1234-ab12-cd34-ef56-abcdef123456"
+
   tags = {
     Environment = "dev"
     Project     = "data-pipeline"
@@ -116,7 +133,6 @@ This module supports the following AWS Glue resources:
 - AWS Glue Trigger
 - AWS Glue Workflow
 - AWS Glue Security Configuration
-- AWS Glue Dev Endpoint
 - IAM Role for Glue resources
 - AWS Glue Schema
 
@@ -176,9 +192,9 @@ module "glue" {
   source = "terraform-aws-modules/glue/aws"
 
   # ... other configuration ...
-  create\_job = true
-  job\_name   = "example-job"
-  job\_command\_script\_location = "s3://my-existing-bucket/scripts/my-job.py"
+  create_job                  = true
+  job_name                    = "example-job"
+  job_command_script_location = "s3://my-existing-bucket/scripts/my-job.py"
 }
 ```
 
@@ -190,17 +206,20 @@ module "glue" {
   source = "terraform-aws-modules/glue/aws"
 
   # ... other configuration ...
-  create\_job = true
-  job\_name   = "example-job"
+  create_job = true
+  job_name   = "example-job"
+
   # Option 1: Create a new S3 bucket for scripts
-  create\_s3\_bucket = true
-  s3\_bucket\_name   = "my-glue-scripts-bucket" # Optional, generated if not provided
+  create_s3_bucket = true
+  s3_bucket_name   = "my-glue-scripts-bucket" # Optional, generated if not provided
+
   # Option 2: Use an existing S3 bucket
-  create\_s3\_bucket      = false
-  existing\_s3\_bucket\_name = "my-existing-bucket"
+  create_s3_bucket         = false
+  existing_s3_bucket_name  = "my-existing-bucket"
+
   # Local script path and optional S3 key
-  job\_script\_local\_path = "${path.module}/scripts/my-job.py"
-  job\_script\_s3\_key     = "custom/path/my-job.py" # Optional, defaults to scripts/filename
+  job_script_local_path = "${path.module}/scripts/my-job.py"
+  job_script_s3_key     = "custom/path/my-job.py" # Optional, defaults to scripts/filename
 }
 ```
 
@@ -209,7 +228,6 @@ This approach automatically:
 2. Uploads your local script to the specified S3 bucket
 3. Sets the correct S3 path in the Glue job configuration
 4. Tracks script changes using file checksums for proper updates
-```
 
 ## Requirements
 
@@ -224,9 +242,9 @@ This approach automatically:
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.97.0 |
-| <a name="provider_awscc"></a> [awscc](#provider\_awscc) | 1.40.0 |
-| <a name="provider_random"></a> [random](#provider\_random) | 3.7.2 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 5.0.0 |
+| <a name="provider_awscc"></a> [awscc](#provider\_awscc) | >= 1.0.0 |
+| <a name="provider_random"></a> [random](#provider\_random) | n/a |
 
 ## Modules
 
