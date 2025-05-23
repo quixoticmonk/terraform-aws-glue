@@ -17,23 +17,23 @@ module "glue" {
   create_catalog_database = true
   catalog_database_name   = "example_database"
   # Crawler
-  create_crawler      = true
-  crawler_name        = "example-crawler"
-  crawler_s3_targets  = [
+  create_crawler = true
+  crawler_name   = "example-crawler"
+  crawler_s3_targets = [
     {
       path = "s3://example-bucket/example-path"
     }
   ]
   # Job with S3 script upload
-  create_job                    = true
-  job_name                      = "example-job"
-  job_type                      = "glueetl"
-  glue_version                  = "4.0"
+  create_job = true
+  job_name   = "example-job"
+  job_type   = "glueetl"
+  glue_version = "4.0"
   # Option 1: Use existing S3 script location
-  job_command_script_location   = "s3://example-bucket/scripts/example-job.py"
+  job_command_script_location = "s3://example-bucket/scripts/example-job.py"
   # Option 2: Upload local script to S3
-  create_s3_bucket              = true
-  job_script_local_path         = "${path.module}/scripts/example-job.py"
+  create_s3_bucket = true
+  job_script_local_path = "${path.module}/scripts/example-job.py"
 ```
 
 ### GlueETL Jobs
@@ -42,25 +42,21 @@ module "glue_etl_job" {
   source = "terraform-aws-modules/glue/aws"
 
   # Basic configuration
-  prefix       = "etl-"
-  create_job   = true
-  job_name     = "data-transformation"
-  job_type     = "glueetl"
+  prefix = "etl-"
+  create_job = true
+  job_name = "data-transformation"
+  job_type = "glueetl"
   glue_version = "4.0"
-  timeout      = 60
-  max_retries  = 2
-
+  timeout = 60
+  max_retries = 2
   # Worker configuration
-  worker_type       = "G.1X"
+  worker_type = "G.1X"
   number_of_workers = 2
-
   # Autoscaling configuration (only for glueetl jobs)
   enable_autoscaling = true
-
   # Job insights (only for glueetl jobs)
   enable_job_insights = true
-  notify_delay_after  = 15
-
+  notify_delay_after = 15
   # Job parameters
   job_parameters = {
     "--conf" = "spark.dynamicAllocation.enabled=true"
@@ -74,16 +70,13 @@ module "glue_python_job" {
   source = "terraform-aws-modules/glue/aws"
 
   # Basic configuration
-  prefix     = "python-"
+  prefix = "python-"
   create_job = true
-  job_name   = "data-processing"
-  job_type   = "pythonshell"
-
+  job_name = "data-processing"
+  job_type = "pythonshell"
   # PythonShell jobs use max_capacity instead of worker_type/number_of_workers
-  max_capacity = 0.0625 # Equivalent to G.025X
-
+  max_capacity = 0.0625  # Equivalent to G.025X
   # Note: Python version (3.9) is automatically set for PythonShell jobs
-
   # Job parameters
   job_parameters = {
     "--my-param" = "my-value"
@@ -91,22 +84,14 @@ module "glue_python_job" {
 }
 ```
 
-### Encryption Configuration
-
-```hcl
-module "glue" {
-  source = "terraform-aws-modules/glue/aws"
-
-  # ... other configuration ...
-
   # Encryption configuration
-  enable_s3_encryption                  = true
-  s3_kms_key_arn                        = "arn:aws:kms:us-east-1:123456789012:key/abcd1234-ab12-cd34-ef56-abcdef123456"
-  enable_job_bookmarks_encryption       = true
-  job_bookmarks_encryption_kms_key_arn  = "arn:aws:kms:us-east-1:123456789012:key/abcd1234-ab12-cd34-ef56-abcdef123456"
-  enable_cloudwatch_encryption          = true
-  cloudwatch_encryption_kms_key_arn     = "arn:aws:kms:us-east-1:123456789012:key/abcd1234-ab12-cd34-ef56-abcdef123456"
-
+  ```hcl
+  enable_s3_encryption = true
+  s3_kms_key_arn = "arn:aws:kms:us-east-1:123456789012:key/abcd1234-ab12-cd34-ef56-abcdef123456"
+  enable_job_bookmarks_encryption = true
+  job_bookmarks_encryption_kms_key_arn = "arn:aws:kms:us-east-1:123456789012:key/abcd1234-ab12-cd34-ef56-abcdef123456"
+  enable_cloudwatch_encryption = true
+  cloudwatch_encryption_kms_key_arn = "arn:aws:kms:us-east-1:123456789012:key/abcd1234-ab12-cd34-ef56-abcdef123456"
   tags = {
     Environment = "dev"
     Project     = "data-pipeline"
@@ -133,6 +118,7 @@ This module supports the following AWS Glue resources:
 - AWS Glue Trigger
 - AWS Glue Workflow
 - AWS Glue Security Configuration
+- AWS Glue Dev Endpoint
 - IAM Role for Glue resources
 - AWS Glue Schema
 
@@ -192,8 +178,8 @@ module "glue" {
   source = "terraform-aws-modules/glue/aws"
 
   # ... other configuration ...
-  create_job                  = true
-  job_name                    = "example-job"
+  create_job = true
+  job_name   = "example-job"
   job_command_script_location = "s3://my-existing-bucket/scripts/my-job.py"
 }
 ```
@@ -208,15 +194,12 @@ module "glue" {
   # ... other configuration ...
   create_job = true
   job_name   = "example-job"
-
   # Option 1: Create a new S3 bucket for scripts
   create_s3_bucket = true
   s3_bucket_name   = "my-glue-scripts-bucket" # Optional, generated if not provided
-
   # Option 2: Use an existing S3 bucket
-  create_s3_bucket         = false
-  existing_s3_bucket_name  = "my-existing-bucket"
-
+  create_s3_bucket      = false
+  existing_s3_bucket_name = "my-existing-bucket"
   # Local script path and optional S3 key
   job_script_local_path = "${path.module}/scripts/my-job.py"
   job_script_s3_key     = "custom/path/my-job.py" # Optional, defaults to scripts/filename
@@ -242,9 +225,9 @@ This approach automatically:
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 5.0.0 |
-| <a name="provider_awscc"></a> [awscc](#provider\_awscc) | >= 1.0.0 |
-| <a name="provider_random"></a> [random](#provider\_random) | n/a |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.98.0 |
+| <a name="provider_awscc"></a> [awscc](#provider\_awscc) | 1.42.0 |
+| <a name="provider_random"></a> [random](#provider\_random) | 3.7.2 |
 
 ## Modules
 
@@ -294,7 +277,6 @@ No modules.
 | <a name="input_create_catalog_database"></a> [create\_catalog\_database](#input\_create\_catalog\_database) | Controls if Glue catalog database should be created | `bool` | `false` | no |
 | <a name="input_create_connection"></a> [create\_connection](#input\_create\_connection) | Controls if Glue connection should be created | `bool` | `false` | no |
 | <a name="input_create_crawler"></a> [create\_crawler](#input\_create\_crawler) | Controls if Glue crawler should be created | `bool` | `false` | no |
-| <a name="input_create_dev_endpoint"></a> [create\_dev\_endpoint](#input\_create\_dev\_endpoint) | Controls if Glue dev endpoint should be created | `bool` | `false` | no |
 | <a name="input_create_iam_role"></a> [create\_iam\_role](#input\_create\_iam\_role) | Controls if IAM role should be created | `bool` | `true` | no |
 | <a name="input_create_job"></a> [create\_job](#input\_create\_job) | Controls if Glue job should be created | `bool` | `false` | no |
 | <a name="input_create_registry"></a> [create\_registry](#input\_create\_registry) | Controls if Glue registry should be created | `bool` | `false` | no |
@@ -302,19 +284,6 @@ No modules.
 | <a name="input_create_schema"></a> [create\_schema](#input\_create\_schema) | Controls if Glue schema should be created | `bool` | `false` | no |
 | <a name="input_create_trigger"></a> [create\_trigger](#input\_create\_trigger) | Controls if Glue trigger should be created | `bool` | `false` | no |
 | <a name="input_create_workflow"></a> [create\_workflow](#input\_create\_workflow) | Controls if Glue workflow should be created | `bool` | `false` | no |
-| <a name="input_dev_endpoint_arguments"></a> [dev\_endpoint\_arguments](#input\_dev\_endpoint\_arguments) | Map of arguments for the dev endpoint | `map(string)` | `null` | no |
-| <a name="input_dev_endpoint_extra_jars_s3_path"></a> [dev\_endpoint\_extra\_jars\_s3\_path](#input\_dev\_endpoint\_extra\_jars\_s3\_path) | S3 path to extra JARs for the dev endpoint | `string` | `null` | no |
-| <a name="input_dev_endpoint_extra_python_libs_s3_path"></a> [dev\_endpoint\_extra\_python\_libs\_s3\_path](#input\_dev\_endpoint\_extra\_python\_libs\_s3\_path) | S3 path to extra Python libraries for the dev endpoint | `string` | `null` | no |
-| <a name="input_dev_endpoint_glue_version"></a> [dev\_endpoint\_glue\_version](#input\_dev\_endpoint\_glue\_version) | Glue version for the dev endpoint | `string` | `null` | no |
-| <a name="input_dev_endpoint_name"></a> [dev\_endpoint\_name](#input\_dev\_endpoint\_name) | Name of the Glue dev endpoint | `string` | `""` | no |
-| <a name="input_dev_endpoint_number_of_nodes"></a> [dev\_endpoint\_number\_of\_nodes](#input\_dev\_endpoint\_number\_of\_nodes) | Number of nodes for the dev endpoint | `number` | `null` | no |
-| <a name="input_dev_endpoint_number_of_workers"></a> [dev\_endpoint\_number\_of\_workers](#input\_dev\_endpoint\_number\_of\_workers) | Number of workers for the dev endpoint | `number` | `null` | no |
-| <a name="input_dev_endpoint_public_key"></a> [dev\_endpoint\_public\_key](#input\_dev\_endpoint\_public\_key) | Public key for the dev endpoint | `string` | `null` | no |
-| <a name="input_dev_endpoint_public_keys"></a> [dev\_endpoint\_public\_keys](#input\_dev\_endpoint\_public\_keys) | List of public keys for the dev endpoint | `list(string)` | `null` | no |
-| <a name="input_dev_endpoint_security_configuration"></a> [dev\_endpoint\_security\_configuration](#input\_dev\_endpoint\_security\_configuration) | Security configuration for the dev endpoint | `string` | `null` | no |
-| <a name="input_dev_endpoint_security_group_ids"></a> [dev\_endpoint\_security\_group\_ids](#input\_dev\_endpoint\_security\_group\_ids) | List of security group IDs for the dev endpoint | `list(string)` | `null` | no |
-| <a name="input_dev_endpoint_subnet_id"></a> [dev\_endpoint\_subnet\_id](#input\_dev\_endpoint\_subnet\_id) | Subnet ID for the dev endpoint | `string` | `null` | no |
-| <a name="input_dev_endpoint_worker_type"></a> [dev\_endpoint\_worker\_type](#input\_dev\_endpoint\_worker\_type) | Worker type for the dev endpoint | `string` | `null` | no |
 | <a name="input_enable_autoscaling"></a> [enable\_autoscaling](#input\_enable\_autoscaling) | Enable autoscaling for the Glue job | `bool` | `false` | no |
 | <a name="input_enable_cloudwatch_encryption"></a> [enable\_cloudwatch\_encryption](#input\_enable\_cloudwatch\_encryption) | Enable encryption for CloudWatch logs | `bool` | `false` | no |
 | <a name="input_enable_job_bookmarks_encryption"></a> [enable\_job\_bookmarks\_encryption](#input\_enable\_job\_bookmarks\_encryption) | Enable encryption for job bookmarks | `bool` | `false` | no |
@@ -352,7 +321,6 @@ No modules.
 | <a name="input_s3_bucket_name"></a> [s3\_bucket\_name](#input\_s3\_bucket\_name) | Name of the S3 bucket to store Glue scripts. If not provided and create\_s3\_bucket is true, a name will be generated | `string` | `null` | no |
 | <a name="input_s3_bucket_tags"></a> [s3\_bucket\_tags](#input\_s3\_bucket\_tags) | A map of tags to assign to the S3 bucket | `map(string)` | `{}` | no |
 | <a name="input_s3_kms_key_arn"></a> [s3\_kms\_key\_arn](#input\_s3\_kms\_key\_arn) | ARN of KMS key to use for S3 bucket encryption. If not provided, AES256 encryption will be used | `string` | `null` | no |
-| <a name="input_schema_arn"></a> [schema\_arn](#input\_schema\_arn) | ARN of an existing schema to use | `string` | `null` | no |
 | <a name="input_schema_compatibility"></a> [schema\_compatibility](#input\_schema\_compatibility) | Compatibility mode of the schema. Valid values: NONE, DISABLED, BACKWARD, BACKWARD\_ALL, FORWARD, FORWARD\_ALL, FULL, FULL\_ALL | `string` | `"NONE"` | no |
 | <a name="input_schema_data_format"></a> [schema\_data\_format](#input\_schema\_data\_format) | Data format of the schema. Valid values: AVRO, JSON, PROTOBUF | `string` | `"AVRO"` | no |
 | <a name="input_schema_definition"></a> [schema\_definition](#input\_schema\_definition) | Schema definition as a JSON string | `string` | `null` | no |

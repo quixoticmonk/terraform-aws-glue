@@ -2,6 +2,10 @@ variable "create" {
   description = "Controls if resources should be created (affects all resources)"
   type        = bool
   default     = true
+  validation {
+    condition     = can(tobool(var.create))
+    error_message = "The create variable must be a boolean value (true/false)."
+  }
 }
 
 variable "tags" {
@@ -21,6 +25,10 @@ variable "create_iam_role" {
   description = "Controls if IAM role should be created"
   type        = bool
   default     = true
+  validation {
+    condition     = can(tobool(var.create_iam_role))
+    error_message = "The create_iam_role variable must be a boolean value (true/false)."
+  }
 }
 
 variable "iam_role_name" {
@@ -40,6 +48,10 @@ variable "create_job" {
   description = "Controls if Glue job should be created"
   type        = bool
   default     = false
+  validation {
+    condition     = can(tobool(var.create_job))
+    error_message = "The create_job variable must be a boolean value (true/false)."
+  }
 }
 
 variable "job_name" {
@@ -100,6 +112,10 @@ variable "worker_type" {
   description = "The type of worker to use. Valid values: Standard, G.1X, G.2X, G.4X, G.8X, G.025X"
   type        = string
   default     = null
+  validation {
+    condition     = var.worker_type == null ? true : contains(["Standard", "G.1X", "G.2X", "G.4X", "G.8X", "G.025X"], var.worker_type)
+    error_message = "Valid values for worker_type are: Standard, G.1X, G.2X, G.4X, G.8X, or G.025X."
+  }
 }
 
 variable "number_of_workers" {
@@ -183,6 +199,10 @@ variable "create_s3_bucket" {
   description = "Controls if S3 bucket should be created for Glue scripts"
   type        = bool
   default     = false
+  validation {
+    condition     = can(tobool(var.create_s3_bucket))
+    error_message = "The create_s3_bucket variable must be a boolean value (true/false)."
+  }
 }
 
 variable "s3_bucket_name" {
@@ -287,6 +307,10 @@ variable "create_catalog_database" {
   description = "Controls if Glue catalog database should be created"
   type        = bool
   default     = false
+  validation {
+    condition     = can(tobool(var.create_catalog_database))
+    error_message = "The create_catalog_database variable must be a boolean value (true/false)."
+  }
 }
 
 variable "catalog_database_name" {
@@ -300,6 +324,10 @@ variable "create_crawler" {
   description = "Controls if Glue crawler should be created"
   type        = bool
   default     = false
+  validation {
+    condition     = can(tobool(var.create_crawler))
+    error_message = "The create_crawler variable must be a boolean value (true/false)."
+  }
 }
 
 variable "crawler_name" {
@@ -319,6 +347,10 @@ variable "create_connection" {
   description = "Controls if Glue connection should be created"
   type        = bool
   default     = false
+  validation {
+    condition     = can(tobool(var.create_connection))
+    error_message = "The create_connection variable must be a boolean value (true/false)."
+  }
 }
 
 variable "connection_name" {
@@ -362,6 +394,10 @@ variable "create_trigger" {
   description = "Controls if Glue trigger should be created"
   type        = bool
   default     = false
+  validation {
+    condition     = can(tobool(var.create_trigger))
+    error_message = "The create_trigger variable must be a boolean value (true/false)."
+  }
 }
 
 variable "trigger_name" {
@@ -423,6 +459,10 @@ variable "create_workflow" {
   description = "Controls if Glue workflow should be created"
   type        = bool
   default     = false
+  validation {
+    condition     = can(tobool(var.create_workflow))
+    error_message = "The create_workflow variable must be a boolean value (true/false)."
+  }
 }
 
 variable "workflow_name" {
@@ -449,96 +489,17 @@ variable "workflow_max_concurrent_runs" {
   default     = null
 }
 
-# Dev Endpoint
-variable "create_dev_endpoint" {
-  description = "Controls if Glue dev endpoint should be created"
-  type        = bool
-  default     = false
-}
 
-variable "dev_endpoint_name" {
-  description = "Name of the Glue dev endpoint"
-  type        = string
-  default     = ""
-}
-
-variable "dev_endpoint_arguments" {
-  description = "Map of arguments for the dev endpoint"
-  type        = map(string)
-  default     = null
-}
-
-variable "dev_endpoint_extra_jars_s3_path" {
-  description = "S3 path to extra JARs for the dev endpoint"
-  type        = string
-  default     = null
-}
-
-variable "dev_endpoint_extra_python_libs_s3_path" {
-  description = "S3 path to extra Python libraries for the dev endpoint"
-  type        = string
-  default     = null
-}
-
-variable "dev_endpoint_glue_version" {
-  description = "Glue version for the dev endpoint"
-  type        = string
-  default     = null
-}
-
-variable "dev_endpoint_number_of_nodes" {
-  description = "Number of nodes for the dev endpoint"
-  type        = number
-  default     = null
-}
-
-variable "dev_endpoint_number_of_workers" {
-  description = "Number of workers for the dev endpoint"
-  type        = number
-  default     = null
-}
-
-variable "dev_endpoint_public_key" {
-  description = "Public key for the dev endpoint"
-  type        = string
-  default     = null
-}
-
-variable "dev_endpoint_public_keys" {
-  description = "List of public keys for the dev endpoint"
-  type        = list(string)
-  default     = null
-}
-
-variable "dev_endpoint_security_configuration" {
-  description = "Security configuration for the dev endpoint"
-  type        = string
-  default     = null
-}
-
-variable "dev_endpoint_security_group_ids" {
-  description = "List of security group IDs for the dev endpoint"
-  type        = list(string)
-  default     = null
-}
-
-variable "dev_endpoint_subnet_id" {
-  description = "Subnet ID for the dev endpoint"
-  type        = string
-  default     = null
-}
-
-variable "dev_endpoint_worker_type" {
-  description = "Worker type for the dev endpoint"
-  type        = string
-  default     = null
-}
 
 # Schema Registry
 variable "create_registry" {
   description = "Controls if Glue registry should be created"
   type        = bool
   default     = false
+  validation {
+    condition     = can(tobool(var.create_registry))
+    error_message = "The create_registry variable must be a boolean value (true/false)."
+  }
 }
 
 variable "registry_name" {
@@ -558,6 +519,10 @@ variable "create_schema" {
   description = "Controls if Glue schema should be created"
   type        = bool
   default     = false
+  validation {
+    condition     = can(tobool(var.create_schema))
+    error_message = "The create_schema variable must be a boolean value (true/false)."
+  }
 }
 
 variable "schema_name" {
@@ -592,12 +557,6 @@ variable "schema_data_format" {
 
 variable "schema_definition" {
   description = "Schema definition as a JSON string"
-  type        = string
-  default     = null
-}
-
-variable "schema_arn" {
-  description = "ARN of an existing schema to use"
   type        = string
   default     = null
 }
